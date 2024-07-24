@@ -1,0 +1,5 @@
+save_path: "simulation_results"
+size: 500
+max_t: 100
+#probabilities: [0.5, 0.5] ここでは外部パラメータとして渡すため、使用しない
+from_showing_graph: 100
