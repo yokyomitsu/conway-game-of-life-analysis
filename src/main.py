@@ -28,8 +28,6 @@ def set_probabilities(alive_p):
     probabilities = [dead_p, alive_p]
     return probabilities
 
-
-
 def run_and_save_all():
 
     # 設定ファイルを読み込む
@@ -65,10 +63,35 @@ def run_and_save_all():
         os.makedirs(output_dir_with_alive_p, exist_ok=True)
         analyzer = LifegameAnalyzer(output_dir_with_alive_p)
         analyzer.save_all_states(all_states)
+    return output_dir
+
+def save_all_densities(output_dir):
+     # 発生確率をコントロール(0.1~0.5に0.05刻み)
+    start = 0.1
+    end = 0.5
+    step = 0.05
+    analyzer = LifegameAnalyzer(output_dir)
+    for alive_p in np.arange(start, end + step, step):
+        analyzer.save_density_graph(alive_p)
+
+def analyze_density(output_dir=None):
+    if output_dir == None:
+        output_dir = run_and_save_all()
+
+    # 密度グラフを保存する
+    save_all_densities(output_dir)
 
 def main():
-    # 調査したい区間で発生確率を変更して実行
+
+    # シミュレーションのみ実行する場合
     run_and_save_all()
+
+    # 任意の結果フォルダを指定して実行する場合
+    output_dir = "simulation_results_20240725_130331"
+    analyze_density(output_dir) 
+
+    # シミュレーションの実行と密度計算を行う場合
+    analyze_density() 
 
 if __name__ == "__main__":
     main()
