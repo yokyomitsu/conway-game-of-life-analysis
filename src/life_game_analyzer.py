@@ -64,12 +64,14 @@ class LifegameAnalyzer():
         return densities
 
     def calculate_density(self,state):
+        """１セルあたりの生きているセルの数を計算する"""
         alive_cnt = int(np.sum(state == 1))
         total_cells = state.size
         density = alive_cnt / total_cells
         return density
     
     def save_density_graph(self,alive_p):
+        """任意の発生確率パラメータでの１セルあたりの生きているセルの推移をプロットして保存する."""
         densities = self.get_alive_densities(alive_p)
         titile = f"Density of alive:probability{round(float(alive_p),2)}"
         xlable = f"step:{len(densities)}"

@@ -14,7 +14,7 @@ def load_config(config_file='config.yaml'):
 
 def run_convolution_simulation(size, max_t, probabilities, from_showing_graph):
     """ライフゲーム（畳み込み演算による高速化）"""
-    game = LifeGameConvolution(size, probabilities)
+    game = LifeGameConvolution(size, probabilities=probabilities)  # ランダム初期状態の場合に使用
     start_time = time.time()
     is_frozen, t, all_states = game.run(max_t, from_showing_graph)
     end_time = time.time()
@@ -82,13 +82,12 @@ def analyze_density(output_dir=None):
     save_all_densities(output_dir)
 
 def main():
+    # # シミュレーションのみ実行する場合
+    # run_and_save_all()
 
-    # シミュレーションのみ実行する場合
-    run_and_save_all()
-
-    # 任意の結果フォルダを指定して実行する場合
-    output_dir = "simulation_results_20240725_130331"
-    analyze_density(output_dir) 
+    # # 任意の結果フォルダを指定して実行する場合
+    # output_dir = "simulation_results_20240725_130331"
+    # analyze_density(output_dir) 
 
     # シミュレーションの実行と密度計算を行う場合
     analyze_density() 

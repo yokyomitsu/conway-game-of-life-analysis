@@ -3,18 +3,23 @@ from scipy.ndimage import convolve
 import matplotlib.pyplot as plt
 
 class LifeGameConvolution:
-    def __init__(self, size, probabilities):
+    def __init__(self, size, probabilities=None, initial_state=None):
         self.size = size
         self.probabilities = probabilities
-        self.current_state = self._initialize_automaton(size, probabilities)
+        self.current_state = self._initialize_automaton(size, probabilities, initial_state)
         self.state_list = []
         self.all_state = [self.current_state]
 
-    def _initialize_automaton(self, size, probabilities):
-        """セルオートマトンの初期状態をランダムに生成"""
-        assert sum(probabilities) == 1, "Probabilities must sum to 1"
-        assert len(probabilities) == 2, "Length of probabilities must match cnt_states"
-        return np.random.choice(2, size=(size, size), p=probabilities)
+    def _initialize_automaton(self, size, probabilities, initial_state):
+        """セルオートマトンの初期状態を設定"""
+        if initial_state is not None:
+            return initial_state
+        elif probabilities is not None:
+            assert sum(probabilities) == 1, "Probabilities must sum to 1"
+            assert len(probabilities) == 2, "Length of probabilities must match cnt_states"
+            return np.random.choice(2, size=(size, size), p=probabilities)
+        else:
+            raise ValueError("Either initial_state or probabilities must be provided")
 
     def _is_frozen(self):
         """全体が周期性、つまり凍結相になったか確認する"""
@@ -63,7 +68,7 @@ class LifeGameConvolution:
         img = ax.imshow(self.current_state, cmap='binary')
         plt.show()
         is_frozen = False
-        for t in range(1,max_t):
+        for t in range(1, max_t):
             self._update_generation()
             is_frozen = self._is_frozen()
             if t > from_showing_graph:
@@ -78,11 +83,11 @@ class LifeGameConvolution:
 def main():
     size = 256
     max_t = 1000
-    probabilities = [0.5, 0.5]
     from_showing_graph = 0
+    probabilities = [0.5, 0.5]
+    game = LifeGameConvolution(size, probabilities=probabilities)
 
-    game = LifeGameConvolution(size, probabilities)
-    is_frozen, t, all_state= game.run(max_t, from_showing_graph)
+    is_frozen, t, all_state = game.run(max_t, from_showing_graph)
     print(f"Simulation ended at step {t} with frozen state: {is_frozen}")
 
 if __name__ == "__main__":
